@@ -8,7 +8,7 @@ const user = new Schema({
             validator:(value:string)=>{
                 if(value.length <5)  throw new Error("UserName should have at least 5 characters");
                 if(/\s/.test(value)) throw new Error("UserName should not have any black spaces");
-                if(/[^!@#$%^&*]/.test(value)) throw new Error("Special characters are not allowed");
+                if(/[!@#$%^&*]g/.test(value)) throw new Error("Special characters are not allowed");
             }
         }
     },
@@ -18,8 +18,15 @@ const user = new Schema({
     },
     password:{
         type:String,
-        required:true
+        required:true,
+        validate:{
+            validator:(value:string)=>{
+                if(value.length<8) throw new Error("Password should have 8 characters");
+                if(!/\d/.test(value)) throw new Error("Password should contain at least a digit")
+                if(!/[!@#$%^&*]g/) throw new Error("Password should have atleat one character")
+            }
+        }
     }
 })
 
-export default mongoose.model("User",user)
+export default mongoose.model("Users",user)
